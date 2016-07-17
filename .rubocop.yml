@@ -1,0 +1,32 @@
+Metrics/LineLength:
+  Max: 120
+
+Metrics/AbcSize:
+  Max: 18
+
+Metrics/MethodLength:
+  Max: 15
+
+# For tests
+Style/BlockDelimiters:
+  Enabled: false
+
+# Stupid frenchie
+Style/AsciiComments:
+  Enabled: false
+
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+AllCops:
+  Exclude:
+    - 'Rakefile'
+    - 'Gemfile'
+    - 'real_debrid.gemspec'
+    - 'spec/spec_helper.rb'
