@@ -1,5 +1,6 @@
 require 'net/http'
 require 'openssl'
+require 'real_debrid/response'
 
 class RealDebrid
   # Méthodes communes aux différentes sous-classes du wrapper
@@ -8,8 +9,8 @@ class RealDebrid
     # Hôte de base
     API_HOST = 'api.real-debrid.com'.freeze
 
-    # URL de base des différentes méthodes
-    API_BASE_URL = '/rest/1.0'.freeze
+    # URI de base des différentes méthodes
+    API_BASE_URI = '/rest/1.0'.freeze
 
     # @param [String] api_key Clé privée d'accès à l'API real-debrid
     def initialize(api_key = nil)
@@ -27,14 +28,29 @@ class RealDebrid
     #
     # @param [String] uri Ressource sur laquelle effectuer la requête en provenance de Real-debrid
     # @param [Hash] body Corps de la requête
+    # @param [Hash] reason_codes de la forme suivante : http_code => 'reason'
     # @return [RealDebrid::Response] Réponse en provenance de Real-debrid
-    def post_request(uri, body = nil)
-      request = Net::HTTP::Post.new API_BASE_URL + uri, 'Content-Type': 'application/json'
+    def post_request(uri, body = nil, reason_codes = {})
+      request = Net::HTTP::Post.new API_BASE_URI + uri, 'Content-Type': 'application/json'
       request['Authorization'] = 'Bearer ' + @api_key
       request.set_form_data body if body
       response = @http.request request
 
-      require 'real_debrid/response'
+      RealDebrid::Response.process_http_response response
+    end
+
+    # Effectue une requête PUT vers real-debrid
+    #
+    # @param [String] uri Ressource sur laquelle effectuer la requête en provenance de Real-debrid
+    # @param [Hash] body Corps de la requête
+    # @param [Hash] reason_codes de la forme suivante : http_code => 'reason'
+    # @return [RealDebrid::Response] Réponse en provenance de Real-debrid
+    def put_request(uri, body = nil, reason_codes = {})
+      request = Net::HTTP::Post.new API_BASE_URI + uri, 'Content-Type': 'application/json'
+      request['Authorization'] = 'Bearer ' + @api_key
+      request.set_form_data body if body
+      response = @http.request request
+
       RealDebrid::Response.process_http_response response
     end
   end
